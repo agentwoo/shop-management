@@ -2,8 +2,9 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        name: "test",
-        component: () => import("@/views/test.vue"),
+        // name: "test",
+        // component: () => import("@/views/test.vue"),
+        redirect: '/home/generalView'
     },
     {
         path: "/login",
@@ -14,6 +15,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/home",
         name: "home",
         component: () => import("@/views/home/index.vue"),
+        redirect: '/home/generalView',
         children: [
             {
                 path: "generalView",
@@ -39,6 +41,21 @@ const routes: Array<RouteRecordRaw> = [
                 path: "adminManegement",
                 name: "adminManegement",
                 component: () => import("@/views/adminManegement/index.vue"),
+            },
+            {
+                path: "swiperManegement",
+                name: "swiperManegement",
+                component: () => import("@/views/swiperManegement/index.vue"),
+            },
+            {
+                path: "goodskindManagement",
+                name: "goodskindManagement",
+                component: () => import("@/views/goodskindManagement/index.vue"),
+            },
+            {
+                path: "goodscollectManagement",
+                name: "goodscollectManagement",
+                component: () => import("@/views/goodscollectManagement/index.vue"),
             },
         ]
     }

@@ -7,6 +7,7 @@ const http = axios.create({
 http.interceptors.request.use(config => {
     let token = localStorage.getItem('gpToken')
     if (token) {
+        token = token.replace('"', "").replace('"', "")
         config.headers = config.headers || {}
         config.headers.Authorization = token
     }

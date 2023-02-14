@@ -3,6 +3,7 @@
 import { reactive, ref } from 'vue'
 import router from '@/router';
 import { errMessage, successMessage } from '@/utils';
+import bg from '@/assets/loginbg.png'
 import { loginApi } from '@/http/index'
 
 const data = reactive({
@@ -33,8 +34,8 @@ async function submitForm() {
     successMessage('登录成功')
 
     // let res = await loginApi({
-    //     username: data.loginForm.username,
-    //     password: data.loginForm.passWord
+    //     username: data.loginForm.username.trim(),
+    //     password: data.loginForm.passWord.trim()
     // })
     // if (res.ok) {
     //     router.push('/home')
@@ -48,41 +49,66 @@ async function submitForm() {
     // }
 
 }
-
-
 </script>
 
 <template>
-    <div class="login-box">
-        <el-form ref="loginFormRef" :model="data.loginForm" status-icon :rules="data.rules" label-width="70px"
-            class="loginForm">
-            <h2>后台管理系统</h2>
-            <el-form-item label="用户名:" prop="username">
-                <el-input v-model="data.loginForm.username" autocomplete="off" />
-            </el-form-item>
-            <el-form-item label="密码:" prop="passWord">
-                <el-input v-model="data.loginForm.passWord" type="password" autocomplete="off" />
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm()" class="sub-btn">登录</el-button>
-            </el-form-item>
-        </el-form>
+    <div class="container">
+        <img :src="bg" width="100%" height="100%" />
+        <div class="container_title">校园二手交易系统</div>
+        <div class="container_content">给学生闲置物品提供最好的解决方式</div>
+        <div class="login-box">
+            <el-form ref="loginFormRef" :model="data.loginForm" status-icon :rules="data.rules" label-width="70px"
+                class="loginForm">
+                <h2>后台管理系统登录</h2>
+                <el-form-item label="账号:" prop="username">
+                    <el-input v-model="data.loginForm.username" autocomplete="off" />
+                </el-form-item>
+                <el-form-item label="密码:" prop="passWord">
+                    <el-input v-model="data.loginForm.passWord" type="password" autocomplete="off" />
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm()" class="sub-btn">登录</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
-.login-box {
-    height: 100vh;
-    background-color: #5C8ABB;
-    box-sizing: border-box;
-    padding-top: 200px;
+.container {
+    img {
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        right: 0px;
+    }
 
-    .loginForm {
-        width: 350px;
-        padding: 20px;
-        background: white;
-        border-radius: 20px;
-        margin: 0 auto;
+    &_title {
+        font-size: 25px;
+        font-weight: 600;
+        color: white;
+        position: absolute;
+        left: 15vw;
+        top: 60vh;
+    }
+
+    &_content {
+        font-size: 15px;
+        color: white;
+        position: absolute;
+        left: 15vw;
+        top: 65vh;
+    }
+
+    .login-box {
+        width: 400px;
+        position: relative;
+        left: 58vw;
+        top: 33vh;
 
         h2 {
             text-align: center;

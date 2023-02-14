@@ -9,20 +9,31 @@ const router = useRouter()
 const menus = computed(() => {
     return [
         {
-            path: '/home/generalView', icon: 'Sunny', title: '概览',
+            path: '/home/generalView', icon: 'House', title: '欢迎使用',
         },
         {
-            path: '/home/userManegement', icon: 'Star', title: '用户管理',
+            path: '/home/goodsManegement', icon: 'Goods', title: '商品管理',
         },
         {
-            path: '/home/goodsManegement', icon: 'Tickets', title: '商品管理',
+            path: '/home/orderManegement', icon: 'Tickets', title: '商品订单',
         },
         {
-            path: '/home/orderManegement', icon: 'House', title: '订单管理',
+            path: '/home/goodscollectManagement', icon: 'Star', title: '商品收藏',
         },
         {
-            path: '/home/adminManegement', icon: 'House', title: '管理员管理',
-        }
+            path: '/home/swiperManegement', icon: 'Picture', title: '轮播图管理',
+        },
+        {
+            path: '/home/goodskindManagement', icon: 'Memo', title: '商品分类',
+        },
+        {
+            path: '/home/userManegement', icon: 'User', title: '用户管理',
+        },
+        {
+            path: '/home/adminManegement', icon: 'Tools', title: '管理员中心',
+        },
+
+
     ]
 })
 
@@ -106,7 +117,7 @@ const logout = () => {
         top: 70px;
         left: 0;
         bottom: 0;
-        width: 250px;
+        width: 180px;
         background-color: #304156;
 
         :deep(.el-menu) {
@@ -120,7 +131,7 @@ const logout = () => {
         left: 250px;
         right: 0;
         bottom: 0;
-        background-color: aqua;
+        background-color: white;
     }
 }
 </style>
