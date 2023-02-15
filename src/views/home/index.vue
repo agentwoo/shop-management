@@ -3,9 +3,11 @@
 import { reactive, toRefs, ref, computed } from 'vue'
 import { useRouter } from 'vue-router';
 import { successMessage } from '@/utils';
+import { useUserStore } from '@/store/index'
+import { delDialog } from '@/utils/index'
+
 
 const router = useRouter()
-
 const menus = computed(() => {
     return [
         {
@@ -32,12 +34,19 @@ const menus = computed(() => {
         {
             path: '/home/adminManegement', icon: 'Tools', title: '管理员中心',
         },
-
-
     ]
 })
 
-const logout = () => {
+async function logout() {
+    let res = await delDialog("确定退出登录?", "提示")
+    if (!res) return
+    localStorage.removeItem('token')
+    localStorage.removeItem('userInfo')
+    localStorage.removeItem('logintimestamp')
+    useUserStore().token = ''
+    useUserStore().user = ''
+    useUserStore().logintimestamp = ''
+
     router.replace({
         path: '/login'
     })
@@ -51,7 +60,7 @@ const logout = () => {
         <div class="homePage_header">
             <el-row>
                 <el-col :span="4">
-                    <img src="@/assets/pig.jpeg" alt="管理员头像">
+                    <img :src="useUserStore().user.user_img" alt="管理员头像">
                 </el-col>
                 <el-col :span="16">
                     <h2>后台管理系统</h2>
@@ -92,6 +101,7 @@ const logout = () => {
 
         img {
             height: 60px;
+            width: 60px;
             border-radius: 50%;
             margin-left: 20px;
             margin-top: 5px;

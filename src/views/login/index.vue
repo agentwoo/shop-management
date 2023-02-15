@@ -5,49 +5,57 @@ import router from '@/router';
 import { errMessage, successMessage } from '@/utils';
 import bg from '@/assets/loginbg.png'
 import { loginApi } from '@/http/index'
+import { useUserStore } from '@/store/index'
+
 
 const data = reactive({
     loginForm: {
-        username: 'admin11',
+        username: 'admin',
         passWord: '123456'
     },
     rules: {
         username: [
             { required: true, message: '请输入密码', trigger: 'blur' },
-            { min: 6, max: 24, message: '密码长度需要在6-24之间', trigger: 'blur' }
+            { min: 1, max: 10, message: '密码长度需要在1-10之间', trigger: 'blur' }
         ],
         passWord: [
             { required: true, message: '请输入密码', trigger: 'blur' },
-            { min: 6, max: 24, message: '密码长度需要在6-24之间', trigger: 'blur' },
+            { min: 6, max: 12, message: '密码长度需要在6-12之间', trigger: 'blur' },
         ]
     }
 })
+// 获取当前时间戳
+let nowtimestamp = new Date().getTime()
 
 const loginFormRef = ref()
+
 async function submitForm() {
     const $form = loginFormRef.value
     if (!$form) return
     const valid = await $form.validate()
     if (!valid) return
 
-    router.push('/home')
-    successMessage('登录成功')
+    let res = await loginApi({
+        username: data.loginForm.username.trim(),
+        password: data.loginForm.passWord.trim()
+    })
 
-    // let res = await loginApi({
-    //     username: data.loginForm.username.trim(),
-    //     password: data.loginForm.passWord.trim()
-    // })
-    // if (res.ok) {
-    //     router.push('/home')
-    //     successMessage('登录成功')
+    if (res.ok) {
+        // 获取用户信息
+        useUserStore().user = res.userInfo
+        localStorage.setItem('token', JSON.stringify(res.token))
+        localStorage.setItem('userInfo', JSON.stringify(res.userInfo))
+        localStorage.setItem('logintimestamp', JSON.stringify(nowtimestamp))
 
+        router.push('/home')
+        successMessage('登录成功！')
 
-    //     data.loginForm.username = ''
-    //     data.loginForm.passWord = ''
-    // } else {
-    //     errMessage(res.err)
-    // }
+        data.loginForm.username = ''
+        data.loginForm.passWord = ''
 
+    } else {
+        errMessage('账号或密码错误！')
+    }
 }
 </script>
 
