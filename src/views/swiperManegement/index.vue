@@ -1,60 +1,49 @@
-<!-- 轮播图管理 -->
-<script lang="ts" setup>
-import { ref } from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+<!-- 轮播图 -->
+<script lang='ts' setup>
+import { reactive, toRefs, ref, onMounted } from 'vue'
+import { getswiperApi } from '@/http/index'
+import { errMessage } from '@/utils';
+import { Iswiper } from '@/utils/type'
 
-import type { UploadProps, UploadUserFile } from 'element-plus'
+const data = reactive({
+    swiper: [] as Iswiper[],
+})
 
-const fileList = ref<UploadUserFile[]>([
-    {
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-])
+onMounted(async () => {
+    let res = await getswiperApi()
+    if (!res.ok) return res.cc(res.message)
+    data.swiper = res.data
+})
 
-const dialogImageUrl = ref('')
-const dialogVisible = ref(false)
-
-const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-    console.log(uploadFile, uploadFiles)
+const onSubmit = () => {
+    console.log('--------');
 }
 
-const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
-    dialogImageUrl.value = uploadFile.url!
-    dialogVisible.value = true
-}
 </script>
 
 <template>
     <div class="container">
-        <el-upload v-model:file-list="fileList" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" limit="4">
-            <el-icon>
-                <Plus />
-            </el-icon>
-        </el-upload>
-
-        <el-dialog v-model="dialogVisible">
-            <img w-full :src="dialogImageUrl" alt="Preview Image" />
-        </el-dialog>
-    </div>
+        <el-button type="primary" @click="onSubmit" style="margin-bottom:10px" v-if="data.swiper.length < 5">添加</el-button>
+        <el-table :data="data.swiper" style="width: 100%" border>
+            <el-table-column prop="swiper_id" label="序列" width="180" />
+            <el-table-column prop="swiper_url" label="用户名称" width="180">
+                <template #default="scope">
+                    <el-image style="width: 120px; height: 70px" :src="scope.row.swiper_url" alt="轮播图"></el-image>
+                </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="120">
+                <template #default>
+                    <el-button link type="primary" size="small">修改</el-button>
+                    <el-button link type="primary" size="small">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+</div>
 </template>
 
-<style scoped>
+<style lang='scss' scoped>
 .container {
-    margin-top: 50px;
-    margin-left: 50px;
+    margin-top: 20px;
+    width: 480px;
 }
 </style>

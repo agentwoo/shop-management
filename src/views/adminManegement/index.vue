@@ -51,7 +51,7 @@ async function submitForm() {
     if (!valid) return
 
     let res = await updatepasswodApi({
-        user_name: user_name,
+        user_name: user_name.trim(),
         password: ruleForm.newpassword.trim()
     })
     if (!res.ok) return errMessage(res.message)

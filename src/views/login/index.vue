@@ -11,7 +11,7 @@ import { useUserStore } from '@/store/index'
 const data = reactive({
     loginForm: {
         username: 'admin',
-        passWord: '123456'
+        passWord: '1234567'
     },
     rules: {
         username: [
