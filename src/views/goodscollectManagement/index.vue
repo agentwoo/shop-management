@@ -61,7 +61,7 @@ const onSubmit = () => {
                 <el-table-column prop="collect_user_name" label="收藏用户" width="100" />
                 <el-table-column fixed="right" label="操作" width="120">
                     <template #default>
-                        <el-button link type="primary" size="small">修改</el-button>
+                        <!-- <el-button link type="primary" size="small">修改</el-button> -->
                         <el-button link type="primary" size="small">查看</el-button>
                     </template>
                 </el-table-column>
@@ -69,7 +69,7 @@ const onSubmit = () => {
         </div>
         <!-- 分页 -->
         <el-pagination layout="prev, pager, next" :total="50" />
-</div>
+    </div>
 </template>
 
 <style lang='scss' scoped>

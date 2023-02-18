@@ -49,22 +49,28 @@ const onSubmit = () => {
                 <el-table-column prop="order_id" label="订单id" width="100" />
                 <el-table-column prop="goods_id" label="商品id" width="100" />
                 <el-table-column prop="goods_title" label="商品名称" width="100" />
+                <el-table-column prop="goods_title_img" label="封面图" width="100">
+                    <template #default="scope">
+                        <el-image style="width: 50px; height: 50px" :src="scope.row.goods_title_img" alt="封面图"></el-image>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="goods_desc" label="商品详情" width="100" />
                 <el-table-column prop="goods_present_price" label="商品价格" width="100" />
                 <el-table-column prop="buy_user_name" label="购买用户" width="100" />
                 <el-table-column prop="goods_contact" label="卖家联系方式" width="120" />
-                <el-table-column prop="goods_status" label="商品状态" width="100" />
+                <el-table-column prop="goods_status" label="交易状态" width="100" />
                 <el-table-column prop="order_create_time" label="订单创建时间" width="150" />
-                <el-table-column fixed="right" label="操作" width="100">
+                <el-table-column fixed="right" label="操作" width="150">
                     <template #default>
-                        <el-button link type="primary" size="small">修改</el-button>
+                        <el-button link type="primary" size="small">已完成</el-button>
+                        <el-button link type="primary" size="small">未完成</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
         <!-- 分页 -->
         <el-pagination layout="prev, pager, next" :total="50" />
-</div>
+    </div>
 </template>
 
 <style lang='scss' scoped>
@@ -72,7 +78,7 @@ const onSubmit = () => {
     margin-top: 20px;
 
     &_form {
-        width: 1070px;
+        width: 1220px;
     }
 }
 </style>

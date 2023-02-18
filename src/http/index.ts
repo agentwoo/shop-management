@@ -16,6 +16,13 @@ export const getuserListApi = (): any => http({ url: '/api/my/getuserList', meth
 
 // 获取商品分类
 export const getgoodskindApi = (): any => http({ url: '/api/my/getgoodskind', method: 'get' })
+// 添加商品分类
+export const addgoodskindApi = (data: { text: string, value: number }): any => http({ url: '/api/my/addgoodskind', method: 'post', data })
+// 修改商品分类名称
+export const editgoodskindtextApi = (data: { text: string, kind_id: number, value: string }): any => http({ url: '/api/my/editgoodskindtext', method: 'post', data })
+// 删除商品分类
+export const delgoodskindApi = (data: { value: string }): any => http({ url: '/api/my/delgoodskind', method: 'post', data })
+
 
 // 获取轮播图
 export const getswiperApi = (): any => http({ url: '/api/my/getswiper', method: 'get' })
