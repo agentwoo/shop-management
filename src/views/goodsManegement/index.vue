@@ -2,7 +2,7 @@
 <script lang='ts' setup>
 import { reactive, toRefs, ref, onMounted } from 'vue'
 import { getallgoodsadminApi } from '@/http/index'
-import { errMessage } from '@/utils';
+import { errMessage, successMessage } from '@/utils';
 import { Igoods } from '@/utils/type'
 
 
@@ -10,8 +10,13 @@ const data = reactive({
     selectData: {
         goods_title: '',
         user_name: '',
+        page: 0,
+        count: 0,
     },
-    allgoods: [] as Igoods[]
+    allgoods: [] as Igoods[],
+
+    // 展示分页数据
+    list: [] as Igoods[][],
 })
 
 
@@ -20,11 +25,44 @@ onMounted(async () => {
     if (!res.ok) errMessage(res.message)
     data.allgoods = res.data
 
+    // 分页
+    data.selectData.count = res.data.length
+    sliceList(res.data)
+
 })
 
-const onSubmit = () => {
-    console.log('-------');
+// 获取当前分页
+const currentChange = (pages: number) => {
+    data.selectData.page = pages - 1
+}
 
+//截取每页展示的数据量
+const sliceList = (arr: Igoods[]) => {
+    data.list = []
+    for (let index = 0; index < arr.length; index += 6) {
+        let newList: any = arr.slice(index, index + 6)
+        data.list.push(newList)
+    }
+}
+
+// 查找商品
+const onSubmit = () => {
+    if (data.selectData.goods_title.trim() === '' && data.selectData.user_name.trim() === '') {
+        return errMessage('请输入商品名或卖家用户名')
+    }
+    let arr: Igoods[] = []
+    if (data.selectData.goods_title) {
+        arr = data.allgoods.filter(v => v.goods_title.indexOf(data.selectData.goods_title) !== -1)
+    }
+    if (data.selectData.user_name) {
+        arr = arr.filter(v => v.pub_user.indexOf(data.selectData.user_name) !== -1)
+    }
+
+    // 重新计算查询后的分页数据
+    data.selectData.count = arr.length
+    sliceList(arr)
+    successMessage('查找成功！')
+    data.selectData.user_name = ''
 }
 
 </script>
@@ -47,8 +85,9 @@ const onSubmit = () => {
         </div>
         <!-- 表格 -->
         <div class="container_form">
-            <el-table :data="data.allgoods" style="width: 100%" border>
+            <el-table :data="data.list[data.selectData.page]" style="width: 100%" border>
                 <el-table-column prop="goods_id" label="商品id" width="80" />
+                <el-table-column prop="pub_user" label="卖家用户名" width="100" />
                 <el-table-column prop="goods_title" label="商品名称" width="100" />
                 <el-table-column prop="goods_title_img" label="商品封面" width="100">
                     <template #default="scope">
@@ -72,7 +111,8 @@ const onSubmit = () => {
             </el-table>
         </div>
         <!-- 分页 -->
-        <el-pagination layout="prev, pager, next" :total="50" />
+        <el-pagination layout="prev, pager, next" :total="data.selectData.count" :page-size="6"
+            @current-change="currentChange" />
     </div>
 </template>
 

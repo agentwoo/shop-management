@@ -14,7 +14,7 @@ const ruleForm = reactive({
 const checkPassWord = (rule: any, value: string, callback: any) => {
     if (!value.trim()) {
         callback('输入不能为空')
-    } else if (value.trim() !== ruleForm.newpassword) {
+    } else if (value.trim() !== ruleForm.newpassword.trim()) {
         callback('密码输入不一致')
     } else {
         return callback()

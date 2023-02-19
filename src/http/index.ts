@@ -13,6 +13,9 @@ export const updatepasswodApi = (data: { user_name: string, password: string }):
 
 // 获取除管理员外用户列表
 export const getuserListApi = (): any => http({ url: '/api/my/getuserList', method: 'get' })
+// 修改用户密码
+export const updateuserpasswodApi = (data: { user_name: string, password: string }): any =>
+    http({ url: '/api/my/updateuserpasswod', method: 'post', data })
 
 // 获取商品分类
 export const getgoodskindApi = (): any => http({ url: '/api/my/getgoodskind', method: 'get' })

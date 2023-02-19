@@ -11,7 +11,7 @@ export interface IuserList {
 
 // 商品分类相关配置
 export interface Igoodskinds {
-    kind_id: number,
+    kind_id?: number,
     text: string,
     value: string,
 }
@@ -72,6 +72,7 @@ export interface Igoods {
     is_delgoods: string,
     goods_status: string,
     pub_user_id: number,
+    pub_user: string,
     goods_swiper_img1: string,
     goods_swiper_img2: string,
     goods_swiper_img3: string,

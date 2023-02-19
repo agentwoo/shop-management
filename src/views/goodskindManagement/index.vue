@@ -55,6 +55,7 @@ async function confirmaddgoodskind() {
     let res = await addgoodskindApi({ text: data.addgoodskindform.text, value: Number(data.addgoodskindform.value) })
     if (!res.ok) return errMessage(res.message)
 
+    data.tableData.push({ text: data.addgoodskindform.text, value: data.addgoodskindform.value })
     data.addgoodskindform.text = ''
     data.addgoodskindform.value = ''
     successMessage(res.message)
@@ -94,7 +95,6 @@ async function confirmeditgoodkind() {
 
     data.editgoodskindform.text = ''
     data.editgoodskindform.kind_id = 0
-
     data.editgoodskindForm = false
 }
 
@@ -106,6 +106,10 @@ async function deletegoodskind(row: { value: string }) {
     if (res) {
         let resmessage = await delgoodskindApi({ value: row.value })
         if (!resmessage.ok) return errMessage(resmessage.message)
+
+        let index = data.tableData.findIndex(v => v.value === row.value)
+        if (index === -1) return
+        data.tableData.splice(index, 1)
         successMessage(resmessage.message)
     }
 }
