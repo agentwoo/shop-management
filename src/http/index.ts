@@ -34,8 +34,24 @@ export const getswiperApi = (): any => http({ url: '/api/my/getswiper', method: 
 // 获取收藏列表
 export const getallcollectgoodsApi = (): any => http({ url: '/api/my/getallcollectgoods', method: 'get' })
 
+
+
 // 获取订单列表
 export const getallordergoodsApi = (): any => http({ url: '/api/my/getallordergoods', method: 'get' })
+// 将商品状态设置为未发货
+export const updateunsendadminApi = (data: { goods_id: number }): any =>
+    http({ url: '/api/my/updateunsendadmin', method: 'post', data })
+// 将商品状态设置为已收货
+export const updatefinishedadminApi = (data: { goods_id: number }): any =>
+    http({ url: '/api/my/updatefinishedadmin', method: 'post', data })
+// 将商品状态设置为已发货
+export const updatefinishedtradadminApi = (data: { goods_id: number }): any =>
+    http({ url: '/api/my/updatefinishedtradadmin', method: 'post', data })
+
+
+
 
 // 获取所有商品
 export const getallgoodsadminApi = (): any => http({ url: '/api/my/getallgoodsadmin', method: 'get' })
+// 下架商品
+export const removegoodsadminApi = (data: { goods_id: number }): any => http({ url: '/api/my/removegoodsadmin', method: 'post', data })

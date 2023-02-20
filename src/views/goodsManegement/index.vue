@@ -1,8 +1,8 @@
 <!-- 商品管理 -->
 <script lang='ts' setup>
 import { reactive, toRefs, ref, onMounted } from 'vue'
-import { getallgoodsadminApi } from '@/http/index'
-import { errMessage, successMessage } from '@/utils';
+import { getallgoodsadminApi, removegoodsadminApi } from '@/http/index'
+import { delDialog, errMessage, successMessage } from '@/utils';
 import { Igoods } from '@/utils/type'
 
 
@@ -65,6 +65,19 @@ const onSubmit = () => {
     data.selectData.user_name = ''
 }
 
+// 下架商品
+async function removegoods(goodsitem: Igoods) {
+    let confirm = await delDialog('确定下架该商品?', '提示')
+    if (!confirm) return
+    let res = await removegoodsadminApi({ goods_id: goodsitem.goods_id })
+    if (!res.ok) errMessage(res.message)
+    successMessage(res.message)
+
+    let index = data.list[data.selectData.page].findIndex(v => v.goods_id === goodsitem.goods_id)
+    if (index === -1) return
+    data.list[data.selectData.page].splice(index, 1, { ...goodsitem, is_delgoods: '1' })
+}
+
 </script>
 
 <template>
@@ -98,14 +111,32 @@ const onSubmit = () => {
                 <el-table-column prop="goods_present_price" label="现价" width="80" />
                 <el-table-column prop="goods_origin_price" label="原价" width="80" />
                 <el-table-column prop="goods_views" label="点击量" width="80" />
-                <el-table-column prop="goods_contact" label="卖家联系方式" width="120" />
-                <el-table-column prop="goods_status" label="交易状态" width="100" />
-                <el-table-column prop="is_delgoods" label="商品状态" width="100" />
-                <el-table-column prop="goods_pub_time" label="商品发布时间" width="150" />
+                <el-table-column prop="goods_contact" label="卖家联系方式" width="160" />
+                <el-table-column label="商品展示状态" width="120">
+                    <template #default="scope">
+                        <div v-if="scope.row.is_delgoods === '0' && scope.row.goods_status === '1'">
+                            <el-tag>上架中</el-tag>
+                        </div>
+                        <div v-if="scope.row.is_delgoods === '0' && scope.row.goods_status !== '1'">
+                            <el-tag type="danger">已下架</el-tag>
+                        </div>
+                        <div v-if="scope.row.is_delgoods === '1'">
+                            <el-tag type="danger">已下架</el-tag>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="商品发布时间" width="120">
+                    <template #default="scope">
+                        <div>{{ scope.row.goods_pub_time.slice(0, 10) }}</div>
+                    </template>
+                </el-table-column>
                 <el-table-column fixed="right" label="操作" width="100">
-                    <template #default>
-                        <el-button link type="primary" size="small">下架商品</el-button>
-                        <!-- <el-button link type="primary" size="small">删除</el-button> -->
+                    <template #default="scope">
+                        <div v-if="scope.row.is_delgoods === '0' && scope.row.goods_status === '1'"
+                            style="text-align: center;">
+                            <el-button link type="primary" size="small" @click="removegoods(scope.row)">下架商品</el-button>
+                        </div>
+                        <div v-else style="text-align: center;">-</div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -121,7 +152,7 @@ const onSubmit = () => {
     margin-top: 20px;
 
     &_form {
-        width: 1250px;
+        width: 1220px;
     }
 }
 </style>

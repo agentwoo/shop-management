@@ -99,9 +99,23 @@ const onSubmit = () => {
                 </el-table-column>
                 <el-table-column prop="goods_desc" label="商品详情" width="150" />
                 <el-table-column prop="goods_present_price" label="商品价格" width="100" />
+                <el-table-column label="商品收藏时间" width="120">
+                    <template #default="scope">
+                        <div>{{ scope.row.collect_create_time.slice(0, 10) }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="是否失效" width="100">
+                    <template #default="scope">
+                        <div v-if="scope.row.goods_status === '1'">
+                            <el-tag>未失效</el-tag>
+                        </div>
+                        <div v-if="scope.row.goods_status === '2'">
+                            <el-tag type="danger">已失效</el-tag>
+                        </div>
+                    </template>
+                </el-table-column>
                 <el-table-column fixed="right" label="操作" width="120">
                     <template #default>
-                        <!-- <el-button link type="primary" size="small">修改</el-button> -->
                         <el-button link type="primary" size="small">查看</el-button>
                     </template>
                 </el-table-column>
@@ -120,7 +134,7 @@ const onSubmit = () => {
     }
 
     &_form {
-        width: 970px;
+        width: 1190px;
     }
 }
 </style>

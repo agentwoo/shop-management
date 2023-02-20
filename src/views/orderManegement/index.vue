@@ -1,8 +1,8 @@
 <!-- 订单管理 -->
 <script lang='ts' setup>
 import { reactive, toRefs, ref, onMounted } from 'vue'
-import { getallordergoodsApi } from '@/http/index'
-import { errMessage, successMessage } from '@/utils';
+import { getallordergoodsApi, updateunsendadminApi, updatefinishedadminApi, updatefinishedtradadminApi } from '@/http/index'
+import { delDialog, errMessage, successMessage } from '@/utils';
 import { Iorder } from '@/utils/type'
 
 const data = reactive({
@@ -65,11 +65,45 @@ const onSubmit = () => {
     data.selectData.goods_title = ''
 }
 
-// 置为已完成
-async function finished(item: Iorder) {
-    console.log('------', item);
+// 设置为已完成
+async function unfinished(item: Iorder) {
+    let confirm = await delDialog('确定设为未发货?', '提示')
+    if (!confirm) return
+    let res = await updateunsendadminApi({ goods_id: item.goods_id })
+    if (!res.ok) return errMessage(res.message)
 
+    let index = data.list[data.selectData.page].findIndex(v => v.goods_id === item.goods_id)
+    if (index === -1) return
+    data.list[data.selectData.page].splice(index, 1, { ...item, goods_status: '2' })
+    successMessage(res.message)
 }
+
+// 设置为已收货
+async function finished(item: Iorder) {
+    let confirm = await delDialog('确定设为未发货?', '提示')
+    if (!confirm) return
+    let res = await updatefinishedadminApi({ goods_id: item.goods_id })
+    if (!res.ok) return errMessage(res.message)
+
+    let index = data.list[data.selectData.page].findIndex(v => v.goods_id === item.goods_id)
+    if (index === -1) return
+    data.list[data.selectData.page].splice(index, 1, { ...item, goods_status: '4' })
+    successMessage(res.message)
+}
+
+// 设置为已发货
+async function finishedtrad(item: Iorder) {
+    let confirm = await delDialog('确定设为未发货?', '提示')
+    if (!confirm) return
+    let res = await updatefinishedtradadminApi({ goods_id: item.goods_id })
+    if (!res.ok) return errMessage(res.message)
+
+    let index = data.list[data.selectData.page].findIndex(v => v.goods_id === item.goods_id)
+    if (index === -1) return
+    data.list[data.selectData.page].splice(index, 1, { ...item, goods_status: '3' })
+    successMessage(res.message)
+}
+
 
 </script>
 
@@ -104,12 +138,34 @@ async function finished(item: Iorder) {
                 <el-table-column prop="goods_desc" label="商品详情" width="100" />
                 <el-table-column prop="goods_present_price" label="商品价格" width="100" />
                 <el-table-column prop="goods_contact" label="卖家联系方式" width="120" />
-                <el-table-column prop="goods_status" label="交易状态" width="100" />
-                <el-table-column prop="order_create_time" label="订单创建时间" width="150" />
+                <el-table-column label="交易状态" width="100">
+                    <template #default="scope">
+                        <div v-if="scope.row.goods_status === '2'">
+                            <el-tag type="info">待发货</el-tag>
+                        </div>
+                        <div v-if="scope.row.goods_status === '3'">
+                            <el-tag type="danger">待收货</el-tag>
+                        </div>
+                        <div v-if="scope.row.goods_status === '4'">
+                            <el-tag>已完成</el-tag>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="订单创建时间" width="150">
+                    <template #default="scope">
+                        <div>{{ scope.row.order_create_time.slice(0, 10) }}</div>
+                    </template>
+                </el-table-column>
                 <el-table-column fixed="right" label="操作" width="150">
                     <template #default="scope">
-                        <el-button link type="primary" size="small" @click="finished(scope.row)">已完成</el-button>
-                        <el-button link type="primary" size="small">未完成</el-button>
+                        <div v-if="scope.row.goods_status === '3'" style="text-align: center;">
+                            <el-button link type="primary" size="small" @click="unfinished(scope.row)">设为未发货</el-button>
+                            <br>
+                            <el-button link type="primary" size="small" @click="finished(scope.row)">设为确认收货</el-button>
+                        </div>
+                        <div v-if="scope.row.goods_status === '2'" style="text-align: center;">
+                            <el-button link type="primary" size="small" @click="finishedtrad(scope.row)">设为已发货</el-button>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
