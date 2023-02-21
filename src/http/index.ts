@@ -6,7 +6,7 @@ interface Idata {
 }
 
 // 登录
-export const loginApi = (data: Idata): any => http({ url: '/api/my/login', method: 'post', data })
+export const loginadminApi = (data: Idata): any => http({ url: '/api/my/loginadmin', method: 'post', data })
 // 修改密码
 export const updatepasswodApi = (data: { user_name: string, password: string }): any =>
     http({ url: '/api/my/updatepasswod', method: 'post', data })
@@ -16,6 +16,11 @@ export const getuserListApi = (): any => http({ url: '/api/my/getuserList', meth
 // 修改用户密码
 export const updateuserpasswodApi = (data: { user_name: string, password: string }): any =>
     http({ url: '/api/my/updateuserpasswod', method: 'post', data })
+// 停用用户
+export const disableuserApi = (data: { user_id: number }): any => http({ url: '/api/my/disableuser', method: 'post', data })
+// 启用用户
+export const enableuserApi = (data: { user_id: number }): any => http({ url: '/api/my/enableuser', method: 'post', data })
+
 
 // 获取商品分类
 export const getgoodskindApi = (): any => http({ url: '/api/my/getgoodskind', method: 'get' })

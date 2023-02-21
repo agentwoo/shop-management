@@ -1,8 +1,8 @@
 <!-- 用户管理 -->
 <script lang='ts' setup>
 import { reactive, toRefs, ref, onMounted } from 'vue'
-import { getuserListApi, updateuserpasswodApi } from '@/http/index'
-import { errMessage, successMessage } from '@/utils/index';
+import { getuserListApi, updateuserpasswodApi, disableuserApi, enableuserApi } from '@/http/index'
+import { delDialog, errMessage, successMessage } from '@/utils/index';
 import { IuserList } from '@/utils/type'
 
 
@@ -114,6 +114,33 @@ async function confirmedituserpwd() {
     data.edituserpwdform.checkpwd = ''
 }
 
+// 启用用户
+async function enableuser(user: IuserList) {
+    let confirm = await delDialog('是否启用该用户', '提示')
+    if (!confirm) return
+    let res = await enableuserApi({ user_id: user.user_id })
+    if (!res.ok) return errMessage(res.message)
+
+    let index = data.list[data.selectData.page].findIndex(v => v.user_id === user.user_id)
+    if (index === -1) return
+    data.list[data.selectData.page].splice(index, 1, { ...user, is_stop: '0' })
+
+    successMessage(res.message)
+}
+
+// 停用用户
+async function disableuser(user: IuserList) {
+    let confirm = await delDialog('是否停用该用户', '提示')
+    if (!confirm) return
+    let res = await disableuserApi({ user_id: user.user_id })
+    if (!res.ok) return errMessage(res.message)
+
+    let index = data.list[data.selectData.page].findIndex(v => v.user_id === user.user_id)
+    if (index === -1) return
+    data.list[data.selectData.page].splice(index, 1, { ...user, is_stop: '1' })
+
+    successMessage(res.message)
+}
 
 </script>
 
@@ -137,12 +164,28 @@ async function confirmedituserpwd() {
                     <el-image style="width: 50px; height: 50px" :src="scope.row.user_img" alt="轮播图"></el-image>
                 </template>
             </el-table-column>
+            <el-table-column label="是否停用" width="120">
+                <template #default="scope">
+                    <div v-if="scope.row.is_stop === '0'">
+                        <el-tag>已启用</el-tag>
+                    </div>
+                    <div v-if="scope.row.is_stop === '1'">
+                        <el-tag type="danger">已停用</el-tag>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column prop="comment" label="备注" width="180" />
             <el-table-column fixed="right" label="操作" width="180">
                 <template #default="scope">
                     <el-button link type="primary" size="small" @click=changepassword(scope.row)>修改密码</el-button>
-                    <el-button link type="primary" size="small">启用</el-button>
-                    <el-button link type="primary" size="small">停用</el-button>
+                    <template v-if="scope.row.is_stop === '1'">
+                        <el-button link type="primary" size="small" @click="enableuser(scope.row)">启用</el-button>
+                        <el-button link type="info" size="small" disabled>停用</el-button>
+                    </template>
+                    <template v-if="scope.row.is_stop === '0'">
+                        <el-button link type="info" size="small" disabled>启用</el-button>
+                        <el-button link type="primary" size="small" @click="disableuser(scope.row)">停用</el-button>
+                    </template>
                 </template>
             </el-table-column>
         </el-table>
@@ -175,7 +218,7 @@ async function confirmedituserpwd() {
 
 <style lang='scss' scoped>
 .container {
-    width: 900px;
+    width: 1020px;
     margin-top: 20px;
 }
 

@@ -6,6 +6,7 @@ export interface IuserList {
     password: string;
     user_img: string;
     comment: string;
+    is_stop: string;
 }
 
 

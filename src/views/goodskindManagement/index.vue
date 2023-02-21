@@ -122,7 +122,7 @@ async function deletegoodskind(row: { value: string }) {
             <el-button type="primary" @click="data.addgoodskindForm = true" style="margin-bottom:10px">添加</el-button>
         </div>
         <el-table :data="data.tableData" style="width: 100%" border>
-            <el-table-column prop="value" label="值" width="180" />
+            <el-table-column prop="value" label="值排序" width="180" />
             <el-table-column prop="text" label="分类" width="180" />
             <el-table-column fixed="right" label="操作" width="120">
                 <template #default="scope">

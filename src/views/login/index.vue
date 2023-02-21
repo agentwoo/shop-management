@@ -4,7 +4,7 @@ import { reactive, ref } from 'vue'
 import router from '@/router';
 import { errMessage, successMessage } from '@/utils';
 import bg from '@/assets/loginbg.png'
-import { loginApi } from '@/http/index'
+import { loginadminApi } from '@/http/index'
 import { useUserStore } from '@/store/index'
 
 
@@ -35,7 +35,7 @@ async function submitForm() {
     const valid = await $form.validate()
     if (!valid) return
 
-    let res = await loginApi({
+    let res = await loginadminApi({
         username: data.loginForm.username.trim(),
         password: data.loginForm.passWord.trim()
     })
@@ -54,7 +54,7 @@ async function submitForm() {
         data.loginForm.passWord = ''
 
     } else {
-        errMessage('账号或密码错误！')
+        errMessage(res.message)
     }
 }
 </script>
