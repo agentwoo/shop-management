@@ -155,4 +155,8 @@ async function removegoods(goodsitem: Igoods) {
         width: 1220px;
     }
 }
+
+:deep(.el-table .cell) {
+    text-align: center;
+}
 </style>

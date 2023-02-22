@@ -184,4 +184,8 @@ async function finishedtrad(item: Iorder) {
         width: 1220px;
     }
 }
+
+:deep(.el-table .cell) {
+    text-align: center;
+}
 </style>

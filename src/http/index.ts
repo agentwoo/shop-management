@@ -34,6 +34,14 @@ export const delgoodskindApi = (data: { value: string }): any => http({ url: '/a
 
 // 获取轮播图
 export const getswiperApi = (): any => http({ url: '/api/my/getswiper', method: 'get' })
+// 添加轮播图
+export const addswiperadminApi = (data: { file: string }): any => http({ url: '/api/my/addswiperadmin', method: 'post', data })
+// 删除轮播图
+export const delswiperadminApi = (data: { swiper_id: string }): any => http({ url: '/api/my/delswiperadmin', method: 'post', data })
+// 修改轮播图
+export const updateswiperadminApi = (data: { swiper_id: string, file: string }): any => http({ url: '/api/my/updateswiperadmin', method: 'post', data })
+
+
 
 
 // 获取收藏列表

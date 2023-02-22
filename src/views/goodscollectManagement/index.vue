@@ -137,4 +137,8 @@ const onSubmit = () => {
         width: 1190px;
     }
 }
+
+:deep(.el-table .cell) {
+    text-align: center;
+}
 </style>
