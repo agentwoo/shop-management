@@ -1,9 +1,10 @@
 <!-- 用户管理 -->
 <script lang='ts' setup>
 import { reactive, toRefs, ref, onMounted } from 'vue'
-import { getuserListApi, updateuserpasswodApi, disableuserApi, enableuserApi } from '@/http/index'
+import { getuserListApi, updateuserpasswodApi, disableuserApi, enableuserApi, commentApi } from '@/http/index'
 import { delDialog, errMessage, successMessage } from '@/utils/index';
 import { IuserList } from '@/utils/type'
+import { userInfo } from 'os';
 
 
 const data = reactive({
@@ -25,6 +26,14 @@ const data = reactive({
         checkpwd: '',
     },
     user_name: '',
+
+    // 添加备注
+    commentForm: false,
+    user_id: 0,
+    commentform: {
+        text: '',
+    },
+
 })
 
 
@@ -142,6 +151,38 @@ async function disableuser(user: IuserList) {
     successMessage(res.message)
 }
 
+// 添加备注
+async function comment(item: IuserList) {
+    data.commentform.text = item.comment
+    data.user_id = item.user_id
+    data.commentForm = true
+}
+
+const commentrules = reactive({
+    text: [
+        { max: 20, message: '备注不能超过20个字' },
+    ],
+})
+
+let comemetformRef = ref()
+async function confirmcomment() {
+    const $form = comemetformRef.value
+    if (!$form) return
+    const valid = await $form.validate()
+    if (!valid) return
+
+    let res = await commentApi({ user_id: data.user_id, comment: data.commentform.text })
+    if (!res.ok) return errMessage(res.message)
+
+    let index = data.list[data.selectData.page].findIndex(v => v.user_id === data.user_id)
+    if (index === -1) return
+    let item = data.list[data.selectData.page].find(v => v.user_id === data.user_id)
+    if (!item) return
+    data.list[data.selectData.page].splice(index, 1, { ...item, comment: data.commentform.text })
+    data.commentForm = false
+    successMessage(res.message)
+}
+
 </script>
 
 <template>
@@ -175,7 +216,7 @@ async function disableuser(user: IuserList) {
                 </template>
             </el-table-column>
             <el-table-column prop="comment" label="备注" width="180" />
-            <el-table-column fixed="right" label="操作" width="180">
+            <el-table-column fixed="right" label="操作" width="250">
                 <template #default="scope">
                     <el-button link type="primary" size="small" @click=changepassword(scope.row)>修改密码</el-button>
                     <template v-if="scope.row.is_stop === '1'">
@@ -186,6 +227,7 @@ async function disableuser(user: IuserList) {
                         <el-button link type="info" size="small" disabled>启用</el-button>
                         <el-button link type="primary" size="small" @click="disableuser(scope.row)">停用</el-button>
                     </template>
+                    <el-button link type="primary" size="small" @click=comment(scope.row)>备注</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -194,8 +236,8 @@ async function disableuser(user: IuserList) {
             @current-change="currentChange" />
     </div>
 
-    <!-- 编辑--只能修改分类名称 -->
-    <el-dialog v-model="data.edituserpwdForm" title="修改分类名称" align-center style="width: 400px;">
+    <!-- 修改密码弹窗 -->
+    <el-dialog v-model="data.edituserpwdForm" title="修改密码" align-center style="width: 400px;">
         <el-form :model="data.edituserpwdform" ref="edituserpwdformRef" :rules="edituserpwdrules">
             <el-form-item label="新密码" prop="newpwd" label-width="80px" required>
                 <el-input v-model="data.edituserpwdform.newpwd" type="password" autocomplete="off" placeholder="请输入新密码" />
@@ -214,11 +256,28 @@ async function disableuser(user: IuserList) {
             </span>
         </template>
     </el-dialog>
+
+    <!-- 添加备注弹窗 -->
+    <el-dialog v-model="data.commentForm" title="修改分类名称" align-center style="width: 400px;">
+        <el-form :model="data.commentform" ref="comemetformRef" :rules="commentrules">
+            <el-form-item label="分类" prop="text" label-width="60px" required>
+                <el-input v-model="data.commentform.text" autocomplete="off" placeholder="请输入分类名称" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="data.commentForm = false">取消</el-button>
+                <el-button type="primary" @click="confirmcomment">
+                    确定
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <style lang='scss' scoped>
 .container {
-    width: 1020px;
+    width: 1090px;
     margin-top: 20px;
 }
 

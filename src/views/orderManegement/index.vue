@@ -37,8 +37,8 @@ const currentChange = (pages: number) => {
 //截取每页展示的数据量
 const sliceList = (arr: Iorder[]) => {
     data.list = []
-    for (let index = 0; index < arr.length; index += 6) {
-        let newList: any = arr.slice(index, index + 6)
+    for (let index = 0; index < arr.length; index += 7) {
+        let newList: any = arr.slice(index, index + 7)
         data.list.push(newList)
     }
 }
@@ -171,14 +171,14 @@ async function finishedtrad(item: Iorder) {
             </el-table>
         </div>
         <!-- 分页 -->
-        <el-pagination layout="prev, pager, next" :total="data.selectData.count" :page-size="6"
+        <el-pagination layout="prev, pager, next" :total="data.selectData.count" :page-size="7"
             @current-change="currentChange" />
     </div>
 </template>
 
 <style lang='scss' scoped>
 .container {
-    margin-top: 20px;
+    margin-top: 10px;
 
     &_form {
         width: 1220px;

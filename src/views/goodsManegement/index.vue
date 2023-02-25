@@ -39,8 +39,8 @@ const currentChange = (pages: number) => {
 //截取每页展示的数据量
 const sliceList = (arr: Igoods[]) => {
     data.list = []
-    for (let index = 0; index < arr.length; index += 6) {
-        let newList: any = arr.slice(index, index + 6)
+    for (let index = 0; index < arr.length; index += 7) {
+        let newList: any = arr.slice(index, index + 7)
         data.list.push(newList)
     }
 }
@@ -107,11 +107,19 @@ async function removegoods(goodsitem: Igoods) {
                         <el-image style="width: 50px; height: 50px" :src="scope.row.goods_title_img" alt="封面"></el-image>
                     </template>
                 </el-table-column>
+                <el-table-column label="详情图" width="300">
+                    <template #default="scope">
+                        <el-image style="width: 50px; height: 50px; margin-left:10px" :src="scope.row.goods_swiper_img1"
+                            alt="封面"></el-image>
+                        <el-image style="width: 50px; height: 50px; margin-left:10px" :src="scope.row.goods_swiper_img2"
+                            alt="封面"></el-image>
+                        <el-image style="width: 50px; height: 50px; margin-left:10px" :src="scope.row.goods_swiper_img3"
+                            alt="封面"></el-image>
+                        <el-image style="width: 50px; height: 50px; margin-left:10px" :src="scope.row.goods_swiper_img4"
+                            alt="封面"></el-image>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="goods_desc" label="商品详情" width="100" />
-                <el-table-column prop="goods_present_price" label="现价" width="80" />
-                <el-table-column prop="goods_origin_price" label="原价" width="80" />
-                <el-table-column prop="goods_views" label="点击量" width="80" />
-                <el-table-column prop="goods_contact" label="卖家联系方式" width="160" />
                 <el-table-column label="商品展示状态" width="120">
                     <template #default="scope">
                         <div v-if="scope.row.is_delgoods === '0' && scope.row.goods_status === '1'">
@@ -125,6 +133,10 @@ async function removegoods(goodsitem: Igoods) {
                         </div>
                     </template>
                 </el-table-column>
+                <el-table-column prop="goods_present_price" label="现价" width="80" />
+                <el-table-column prop="goods_origin_price" label="原价" width="80" />
+                <el-table-column prop="goods_views" label="点击量" width="80" />
+                <el-table-column prop="goods_contact" label="卖家联系方式" width="160" />
                 <el-table-column label="商品发布时间" width="120">
                     <template #default="scope">
                         <div>{{ scope.row.goods_pub_time.slice(0, 10) }}</div>
@@ -142,14 +154,14 @@ async function removegoods(goodsitem: Igoods) {
             </el-table>
         </div>
         <!-- 分页 -->
-        <el-pagination layout="prev, pager, next" :total="data.selectData.count" :page-size="6"
+        <el-pagination layout="prev, pager, next" :total="data.selectData.count" :page-size="7"
             @current-change="currentChange" />
     </div>
 </template>
 
 <style lang='scss' scoped>
 .container {
-    margin-top: 20px;
+    margin-top: 10px;
 
     &_form {
         width: 1220px;

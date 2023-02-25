@@ -20,6 +20,8 @@ export const updateuserpasswodApi = (data: { user_name: string, password: string
 export const disableuserApi = (data: { user_id: number }): any => http({ url: '/api/my/disableuser', method: 'post', data })
 // 启用用户
 export const enableuserApi = (data: { user_id: number }): any => http({ url: '/api/my/enableuser', method: 'post', data })
+// 添加备注
+export const commentApi = (data: { user_id: number, comment: string }): any => http({ url: '/api/my/comment', method: 'post', data })
 
 
 // 获取商品分类
