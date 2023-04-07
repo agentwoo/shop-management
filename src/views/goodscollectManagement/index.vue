@@ -39,8 +39,8 @@ const currentChange = (pages: number) => {
 //截取每页展示的数据量
 const sliceList = (arr: Icollect[]) => {
     data.list = []
-    for (let index = 0; index < arr.length; index += 7) {
-        let newList: any = arr.slice(index, index + 7)
+    for (let index = 0; index < arr.length; index += 5) {
+        let newList: any = arr.slice(index, index + 5)
         data.list.push(newList)
     }
 }
@@ -56,7 +56,7 @@ const onSubmit = () => {
         arr = data.collectgoods.filter(v => v.collect_user_name.indexOf(data.selectData.user_name) !== -1)
     }
     if (data.selectData.goods_title) {
-        arr = arr.filter(v => v.goods_title.indexOf(data.selectData.goods_title) !== -1)
+        arr = (data.selectData.user_name ? arr : data.collectgoods).filter(v => v.goods_title.indexOf(data.selectData.goods_title) !== -1)
     }
 
     // 重新计算查询后的分页数据
@@ -97,7 +97,7 @@ const onSubmit = () => {
                         <el-image style="width: 50px; height: 50px" :src="scope.row.goods_title_img" alt="轮播图"></el-image>
                     </template>
                 </el-table-column>
-                <el-table-column prop="goods_desc" label="商品详情" width="150" />
+                <el-table-column prop="goods_desc" label="商品详情" width="250" />
                 <el-table-column prop="goods_present_price" label="商品价格" width="100" />
                 <el-table-column label="商品收藏时间" width="120">
                     <template #default="scope">
@@ -114,15 +114,15 @@ const onSubmit = () => {
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="120">
-                    <template #default>
-                        <el-button link type="primary" size="small">查看</el-button>
-                    </template>
-                </el-table-column>
+                <!-- <el-table-column fixed="right" label="操作" width="120">
+                                            <template #default>
+                                                <el-button link type="primary" size="small">查看</el-button>
+                                            </template>
+                                        </el-table-column> -->
             </el-table>
         </div>
         <!-- 分页 -->
-        <el-pagination layout="prev, pager, next" :total="data.selectData.count" :page-size="7"
+        <el-pagination layout="prev, pager, next" :total="data.selectData.count" :page-size="5"
             @current-change="currentChange" />
     </div>
 </template>
@@ -134,7 +134,7 @@ const onSubmit = () => {
     }
 
     &_form {
-        width: 1190px;
+        width: 1170px;
     }
 }
 

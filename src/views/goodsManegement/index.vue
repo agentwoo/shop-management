@@ -55,7 +55,7 @@ const onSubmit = () => {
         arr = data.allgoods.filter(v => v.goods_title.indexOf(data.selectData.goods_title) !== -1)
     }
     if (data.selectData.user_name) {
-        arr = arr.filter(v => v.pub_user.indexOf(data.selectData.user_name) !== -1)
+        arr = (data.selectData.goods_title ? arr : data.allgoods).filter(v => v.pub_user.indexOf(data.selectData.user_name) !== -1)
     }
 
     // 重新计算查询后的分页数据
@@ -101,7 +101,7 @@ async function removegoods(goodsitem: Igoods) {
             <el-table :data="data.list[data.selectData.page]" style="width: 100%" border>
                 <el-table-column prop="goods_id" label="商品id" width="80" />
                 <el-table-column prop="pub_user" label="卖家用户名" width="100" />
-                <el-table-column prop="goods_title" label="商品名称" width="100" />
+                <el-table-column prop="goods_title" label="商品名称" width="250" />
                 <el-table-column prop="goods_title_img" label="商品封面" width="100">
                     <template #default="scope">
                         <el-image style="width: 50px; height: 50px" :src="scope.row.goods_title_img" alt="封面"></el-image>
@@ -119,7 +119,7 @@ async function removegoods(goodsitem: Igoods) {
                             alt="封面"></el-image>
                     </template>
                 </el-table-column>
-                <el-table-column prop="goods_desc" label="商品详情" width="100" />
+                <el-table-column prop="goods_desc" label="商品详情" width="400" />
                 <el-table-column label="商品展示状态" width="120">
                     <template #default="scope">
                         <div v-if="scope.row.is_delgoods === '0' && scope.row.goods_status === '1'">
@@ -133,6 +133,7 @@ async function removegoods(goodsitem: Igoods) {
                         </div>
                     </template>
                 </el-table-column>
+                <el-table-column prop="goods_kind" label="分类" width="100" />
                 <el-table-column prop="goods_present_price" label="现价" width="80" />
                 <el-table-column prop="goods_origin_price" label="原价" width="80" />
                 <el-table-column prop="goods_views" label="点击量" width="80" />

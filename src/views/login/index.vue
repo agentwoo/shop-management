@@ -10,8 +10,8 @@ import { useUserStore } from '@/store/index'
 
 const data = reactive({
     loginForm: {
-        username: 'admin',
-        passWord: '1234567'
+        username: '',
+        passWord: ''
     },
     rules: {
         username: [
@@ -47,14 +47,14 @@ async function submitForm() {
         localStorage.setItem('userInfo', JSON.stringify(res.userInfo))
         localStorage.setItem('logintimestamp', JSON.stringify(nowtimestamp))
 
-        router.push('/home')
+        router.replace('/home')
         successMessage('登录成功！')
 
         data.loginForm.username = ''
         data.loginForm.passWord = ''
 
     } else {
-        errMessage(res.message)
+        errMessage('账号或密码错误')
     }
 }
 </script>

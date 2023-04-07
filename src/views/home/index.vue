@@ -31,9 +31,9 @@ const menus = computed(() => {
         {
             path: '/home/userManegement', icon: 'User', title: '用户管理',
         },
-        {
-            path: '/home/adminManegement', icon: 'Tools', title: '管理员中心',
-        },
+        // {
+        //     path: '/home/adminManegement', icon: 'Tools', title: '管理员中心',
+        // },
     ]
 })
 

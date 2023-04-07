@@ -37,8 +37,8 @@ const currentChange = (pages: number) => {
 //截取每页展示的数据量
 const sliceList = (arr: Iorder[]) => {
     data.list = []
-    for (let index = 0; index < arr.length; index += 7) {
-        let newList: any = arr.slice(index, index + 7)
+    for (let index = 0; index < arr.length; index += 6) {
+        let newList: any = arr.slice(index, index + 6)
         data.list.push(newList)
     }
 }
@@ -54,7 +54,7 @@ const onSubmit = () => {
         arr = data.ordergoods.filter(v => v.buy_user_name.indexOf(data.selectData.user_name) !== -1)
     }
     if (data.selectData.goods_title) {
-        arr = arr.filter(v => v.goods_title.indexOf(data.selectData.goods_title) !== -1)
+        arr = (data.selectData.user_name ? arr : data.ordergoods).filter(v => v.goods_title.indexOf(data.selectData.goods_title) !== -1)
     }
 
     // 重新计算查询后的分页数据
@@ -128,16 +128,8 @@ async function finishedtrad(item: Iorder) {
             <el-table :data="data.list[data.selectData.page]" style="width: 100%" border>
                 <el-table-column prop="order_id" label="订单id" width="100" />
                 <el-table-column prop="buy_user_name" label="购买用户" width="100" />
-                <el-table-column prop="goods_id" label="商品id" width="100" />
-                <el-table-column prop="goods_title" label="商品名称" width="100" />
-                <el-table-column prop="goods_title_img" label="封面图" width="100">
-                    <template #default="scope">
-                        <el-image style="width: 50px; height: 50px" :src="scope.row.goods_title_img" alt="封面图"></el-image>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="goods_desc" label="商品详情" width="100" />
-                <el-table-column prop="goods_present_price" label="商品价格" width="100" />
                 <el-table-column prop="goods_contact" label="卖家联系方式" width="120" />
+                <el-table-column prop="goods_id" label="商品id" width="100" />
                 <el-table-column label="交易状态" width="100">
                     <template #default="scope">
                         <div v-if="scope.row.goods_status === '2'">
@@ -151,6 +143,16 @@ async function finishedtrad(item: Iorder) {
                         </div>
                     </template>
                 </el-table-column>
+                <el-table-column prop="goods_title" label="商品名称" width="150" />
+                <el-table-column prop="goods_title_img" label="封面图" width="100">
+                    <template #default="scope">
+                        <el-image style="width: 50px; height: 50px" :src="scope.row.goods_title_img" alt="封面图"></el-image>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="goods_desc" label="商品详情" width="250" />
+                <el-table-column prop="goods_present_price" label="商品价格" width="100" />
+
+
                 <el-table-column label="订单创建时间" width="150">
                     <template #default="scope">
                         <div>{{ scope.row.order_create_time.slice(0, 10) }}</div>
@@ -171,7 +173,7 @@ async function finishedtrad(item: Iorder) {
             </el-table>
         </div>
         <!-- 分页 -->
-        <el-pagination layout="prev, pager, next" :total="data.selectData.count" :page-size="7"
+        <el-pagination layout="prev, pager, next" :total="data.selectData.count" :page-size="6"
             @current-change="currentChange" />
     </div>
 </template>

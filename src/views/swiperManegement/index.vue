@@ -145,8 +145,8 @@ async function confirmupdateswiper() {
         <el-button type="primary" @click="data.addswiperForm = true" style="margin-bottom:10px"
             v-if="data.swiper.length < 10">添加</el-button>
         <el-table :data="data.list[data.selectData.page]" style="width: 100%" border>
-            <el-table-column prop="swiper_id" label="轮播图id" width="180" />
-            <el-table-column prop="swiper_url" label="用户名称" width="180">
+            <!-- <el-table-column prop="swiper_id" label="轮播图id" width="180" /> -->
+            <el-table-column prop="swiper_url" label="轮播图" width="180">
                 <template #default="scope">
                     <el-image style="width: 120px; height: 70px" :src="scope.row.swiper_url" alt="轮播图"></el-image>
                 </template>
@@ -228,7 +228,7 @@ async function confirmupdateswiper() {
 <style lang='scss' scoped>
 .container {
     margin-top: 20px;
-    width: 480px;
+    width: 300px;
 }
 
 :deep(.el-table .cell) {

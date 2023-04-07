@@ -79,6 +79,7 @@ const editgoodskindrules = reactive({
     ],
 })
 let editgoodskindformRef = ref()
+// 修改商品分类
 async function confirmeditgoodkind() {
     const $form = editgoodskindformRef.value
     if (!$form) return
@@ -91,6 +92,14 @@ async function confirmeditgoodkind() {
         value: data.editgoodskindform.value
     })
     if (!res.ok) return errMessage(res.message)
+
+    let index = data.tableData.findIndex(v => v.kind_id === data.editgoodskindform.kind_id)
+    if (index === -1) return
+    let item = data.tableData.find(v => v.kind_id === data.editgoodskindform.kind_id)
+    if (!item) return
+    item = { ...item, text: data.editgoodskindform.text }
+    data.tableData.splice(index, 1, item)
+
     successMessage(res.message)
 
     data.editgoodskindform.text = ''
@@ -122,7 +131,7 @@ async function deletegoodskind(row: { value: string }) {
             <el-button type="primary" @click="data.addgoodskindForm = true" style="margin-bottom:10px">添加</el-button>
         </div>
         <el-table :data="data.tableData" style="width: 100%" border>
-            <el-table-column prop="value" label="值排序" width="180" />
+            <el-table-column prop="value" label="分类值" width="180" />
             <el-table-column prop="text" label="分类" width="180" />
             <el-table-column fixed="right" label="操作" width="120">
                 <template #default="scope">
